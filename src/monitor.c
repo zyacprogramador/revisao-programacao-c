@@ -35,10 +35,39 @@ const char *estado_como_texto(EstadoLeitura estado) {
 }
 
 bool calcular_estatisticas(const Sensor *sensor, Estatisticas *resultado) {
-    /* ETAPA 02: calcule mínima, máxima e média das leituras válidas. */
-    (void)sensor;
-    (void)resultado;
-    return false;
+    if (sensor == NULL || resultado == NULL ||
+        sensor->quantidade > MAX_LEITURAS) {
+        return false;
+    }
+
+    size_t validas = 0;
+    double soma = 0.0;
+
+    for (size_t i = 0; i < sensor->quantidade; i++) {
+        double valor = sensor->leituras[i];
+
+        if (!leitura_valida(valor)) {
+            continue;
+        }
+
+        if (validas == 0 || valor < resultado->minima) {
+            resultado->minima = valor;
+        }
+
+        if (validas == 0 || valor > resultado->maxima) {
+            resultado->maxima = valor;
+        }
+
+        soma += valor;
+        validas++;
+    }
+
+    if (validas == 0) {
+        return false;
+    }
+
+    resultado->media = soma / validas;
+    return true;
 }
 
 bool sensor_adicionar_leitura(Sensor *sensor, double valor) {
