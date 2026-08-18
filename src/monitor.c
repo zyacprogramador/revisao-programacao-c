@@ -4,26 +4,34 @@
 #include <stdlib.h>
 
 double celsius_para_fahrenheit(double temperatura) {
-    /* ETAPA 01: implemente a conversão. */
-    return temperatura;
+    return temperatura * 9.0 / 5.0 + 32.0;
 }
 
 bool leitura_valida(double valor) {
-    /* ETAPA 01: aceite valores entre -40.0 e 125.0, inclusive. */
-    (void)valor;
-    return false;
+    return valor >= -40.0 && valor <= 125.0;
 }
 
 EstadoLeitura classificar_leitura(double valor) {
-    /* ETAPA 01: classifique com if/else. */
-    (void)valor;
-    return LEITURA_INVALIDA;
+    if (!leitura_valida(valor)) {
+        return LEITURA_INVALIDA;
+    } else if (valor >= 80.0) {
+        return LEITURA_ALERTA;
+    } else {
+        return LEITURA_NORMAL;
+    }
 }
 
 const char *estado_como_texto(EstadoLeitura estado) {
-    /* ETAPA 01: converta o enum em texto usando switch. */
-    (void)estado;
-    return "NAO_IMPLEMENTADO";
+    switch (estado) {
+        case LEITURA_INVALIDA:
+            return "INVALIDA";
+        case LEITURA_NORMAL:
+            return "NORMAL";
+        case LEITURA_ALERTA:
+            return "ALERTA";
+    }
+
+    return "DESCONHECIDA";
 }
 
 bool calcular_estatisticas(const Sensor *sensor, Estatisticas *resultado) {
